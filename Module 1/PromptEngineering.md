@@ -20,7 +20,7 @@ Include:
 Respond in a friendly easy to read format to share with the intern. Do not skip reasoning.
 Give short and concise answers if they are not explanatory sentences.
 ## Example of response format:
-‘’’Machine learning Learning path
+```Machine learning Learning path
 A complete roadmap from beginner to production ML Engineer
 Overall curriculum
 Phase 0 – Foundations
@@ -30,5 +30,5 @@ Phase 1 – Mathematics
 Recommended Resources
 A list of documentations separated by interactive learning, official documentations, books, datasets
 A concise conclusion on how the learning path will be
-‘’’
+```
 ```
