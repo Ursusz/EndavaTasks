@@ -18,6 +18,15 @@ Task: Create a database for a employee timecard system. Define and implement spe
 **NOTE THAT** at the moment when I have made the database diagram (and lost the code) employee metadata wasn't implemented yet and the absences column in timecard_entry was varchar instead of number.
 
 ![DatabaseDiagram](/Module%202/static/database_diagram.png)
+## IMPLEMENTATIONS
+- [Department](/Module%202/sql/individual/scripts/department.sql)
+- [Employee](/Module%202/sql/individual/scripts/employee.sql)
+- [Project](/Module%202/sql/individual/scripts/project.sql)
+- [Task](/Module%202/sql/individual/scripts/task.sql)
+- [Timecard](/Module%202/sql/individual/scripts/timecard.sql)
+- [Timecard_Entry](/Module%202/sql/individual/scripts/timecard_entry.sql)
+- [Work_Entry](/Module%202/sql/individual/scripts/work_entry.sql)
+- [DATABASE INIT](/Module%202/sql/individual/scripts/init.sql)
 
 ### Project overview
 This database models a simple employee time tracking system. Employees belong to departments, departments own projects,

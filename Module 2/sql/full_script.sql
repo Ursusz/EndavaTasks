@@ -6,7 +6,8 @@ DECLARE
 		'TIMECARD',
 		'PROJECT',
 		'EMPLOYEE',
-		'DEPARTMENT'
+		'DEPARTMENT',
+		'TASK'
 	);
 BEGIN	
 	FOR i IN 1..v_table_names.count LOOP
