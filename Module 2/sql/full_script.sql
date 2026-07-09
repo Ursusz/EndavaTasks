@@ -51,20 +51,7 @@ CREATE TABLE EMPLOYEE(
 	CONSTRAINT fk_employee_manager FOREIGN KEY(manager_id) REFERENCES employee(person_number)
 );
 
-ALTER TABLE employee
-ADD employee_metadata clob CHECK (employee_metadata IS json);
-
-UPDATE EMPLOYEE e
-SET employee_metadata = '{
-	"phone": "+4077123456",
-	"linkedin": "linkedin.com/in/placeholder",
-	"languages": ["Romanian", "English"],
-	"emergencyContact": {
-		"name": "placeholder",
-		"phone": "+4077456123"
-	}
-}'
-WHERE e.LAST_NAME = 'Ursu';
+CREATE INDEX IX_Employee_birthdate ON employee(birth_date);
 
 DECLARE
 	v_emp_count NUMBER := 0;
@@ -103,6 +90,21 @@ END;
 INSERT INTO employee(first_name, last_name, birth_date, department_id, salary, manager_id)
 VALUES('Alexandru Petrut', 'Ursu', to_date('16-01-2004', 'DD-MM-YYYY'), 1, 1234, 5);
 COMMIT;
+
+ALTER TABLE employee
+ADD employee_metadata clob CHECK (employee_metadata IS json);
+
+UPDATE EMPLOYEE e
+SET employee_metadata = '{
+	"phone": "+4077123456",
+	"linkedin": "linkedin.com/in/placeholder",
+	"languages": ["Romanian", "English"],
+	"emergencyContact": {
+		"name": "placeholder",
+		"phone": "+4077456123"
+	}
+}'
+WHERE e.LAST_NAME = 'Ursu';
 
 --------------------------------------------- PROJECT -------------------------------------------------------
 
@@ -192,7 +194,7 @@ CREATE TABLE TIMECARD_ENTRY(
 	project_id NUMBER NOT NULL,
 	time_type varchar2(16 char) CHECK (time_type IN ('OVERTIME', 'REGULAR')),
 	location varchar2(32 char) CHECK (location IN ('OFFICE', 'HOME', 'RELOCATED')),
-	absences varchar2(32 char),
+	absences number,
 	task_id number,
 	relocated_country varchar2(32 char),
 	CONSTRAINT pk_timecard_entry PRIMARY KEY(id),
@@ -200,7 +202,6 @@ CREATE TABLE TIMECARD_ENTRY(
 	CONSTRAINT fk_timecard_entry_project FOREIGN KEY(project_id) REFERENCES project(project_id),
 	CONSTRAINT fk_timecard_entry_task FOREIGN KEY(task_id) REFERENCES task(id)
 );
-
 
 /*
 	--------------	   ------------
