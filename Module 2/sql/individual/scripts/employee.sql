@@ -12,6 +12,21 @@ CREATE TABLE EMPLOYEE(
 	CONSTRAINT fk_employee_manager FOREIGN KEY(manager_id) REFERENCES employee(person_number)
 );
 
+ALTER TABLE employee
+ADD employee_metadata clob CHECK (employee_metadata IS json);
+
+UPDATE EMPLOYEE e
+SET employee_metadata = '{
+	"phone": "+4077123456",
+	"linkedin": "linkedin.com/in/placeholder",
+	"languages": ["Romanian", "English"],
+	"emergencyContact": {
+		"name": "placeholder",
+		"phone": "+4077456123"
+	}
+}'
+WHERE e.LAST_NAME = 'Ursu';
+
 DECLARE
 	v_emp_count NUMBER := 0;
 BEGIN
