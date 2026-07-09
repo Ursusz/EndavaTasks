@@ -25,7 +25,7 @@ employees submit weekly timecards, and every timecard contains project-specific 
 enforced through triggers, helper PL/SQL procedures and functions, JSON data amd reporting queries.
 
 ## Implemented features overview
-## constraints
+## Constraints
 * Task: Include at least one example of each type of constraint presented during the course.
 Constraints implemented:
 - Primary Keys
