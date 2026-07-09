@@ -88,13 +88,13 @@ FOR EACH ROW
 DECLARE
 	v_timecard_submitted NUMBER;
 BEGIN
-	SELECT 1
+	SELECT count(*)
 	INTO v_timecard_submitted
 	FROM timecard
 	WHERE id = :NEW.timecard_id
-	AND status = IN ('SUBMITTED', 'APPROVED');
+	AND status IN ('SUBMITTED', 'APPROVED');
 
-	IF v_timecard_submitted = 1 THEN
+	IF v_timecard_submitted > 0 THEN
 		RAISE_APPLICATION_ERROR(-20006, 'You cannot enter or edit this timecard.');
 	END IF;
 END;

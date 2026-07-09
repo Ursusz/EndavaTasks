@@ -11,8 +11,12 @@ DECLARE
 	);
 BEGIN	
 	FOR i IN 1..v_table_names.count LOOP
-		EXECUTE IMMEDIATE 'DROP TABLE IF EXISTS ' || v_table_names(i) || ' CASCADE CONSTRAINTS';
+		EXECUTE IMMEDIATE 'DROP TABLE ' || v_table_names(i) || ' CASCADE CONSTRAINTS';
 	END LOOP;
+	EXCEPTION WHEN OTHERS THEN 
+		IF SQLCODE != -942 THEN
+			RAISE;
+		END IF;
 END;
 /
 
@@ -51,8 +55,6 @@ CREATE TABLE EMPLOYEE(
 	CONSTRAINT fk_employee_department FOREIGN KEY(department_id) REFERENCES department(department_id),
 	CONSTRAINT fk_employee_manager FOREIGN KEY(manager_id) REFERENCES employee(person_number)
 );
-
-CREATE INDEX IX_Employee_birthdate ON employee(birth_date);
 
 DECLARE
 	v_emp_count NUMBER := 0;
@@ -168,24 +170,12 @@ CREATE TABLE TIMECARD(
 );
 
 INSERT INTO timecard(status, start_date, submission_date, employee_id)
-values('SAVED', to_date('07-05-2026', 'MM-DD-YY'), NULL, 5);
+values('SAVED', to_date('07-05-2026', 'MM-DD-YY'), NULL, (SELECT person_number FROM employee WHERE last_name = 'Ursu'));
 INSERT INTO timecard(status, start_date, submission_date, employee_id)
-values('SAVED', to_date('06-29-2026', 'MM-DD-YY'), NULL, 5);
+values('SAVED', to_date('06-29-2026', 'MM-DD-YY'), NULL, (SELECT person_number FROM employee WHERE last_name = 'Ursu'));
 INSERT INTO timecard(status, start_date, submission_date, employee_id)
-values('SAVED', to_date('06-22-2026', 'MM-DD-YY'), NULL, 5);
+values('SAVED', to_date('06-22-2026', 'MM-DD-YY'), NULL, (SELECT person_number FROM employee WHERE last_name = 'Ursu'));
 COMMIT;
-
-
--- todo, nu e o idee buna de view
---CREATE OR REPLACE VIEW user_timecards AS
---SELECT t.start_date AS "Period start", t.start_date + 7 AS "Period end",
---t.status AS "Status",
---(SELECT sum(we.worked_hours) FROM timecard_entry te JOIN work_entry we ON te.id = we.timecard_entry_id WHERE te.timecard_id = t.id) AS "Reported Hours",
---'40' AS "Scheduled Hours",
---'40' AS "Total Hours",
---t.submission_date AS "Submission Date",
---NULL AS "Exception"
---FROM timecard t WHERE t.person_id = ...
 
 --------------------------------------------- TIMECARD ENTRY -------------------------------------------------------
 
@@ -279,22 +269,22 @@ FOR EACH ROW
 DECLARE
 	v_timecard_submitted NUMBER;
 BEGIN
-	SELECT 1
+	SELECT count(*)
 	INTO v_timecard_submitted
 	FROM timecard
 	WHERE id = :NEW.timecard_id
-	AND status = IN ('SUBMITTED', 'APPROVED');
+	AND status IN ('SUBMITTED', 'APPROVED');
 
-	IF v_timecard_submitted = 1 THEN
+	IF v_timecard_submitted > 0 THEN
 		RAISE_APPLICATION_ERROR(-20006, 'You cannot enter or edit this timecard.');
 	END IF;
 END;
 /
 
 INSERT INTO timecard_entry(timecard_id, project_id, time_type, location, absences, task_id, relocated_country)
-values(1, (SELECT project_id FROM project WHERE project_code = 'INTGR999BHD'), 'REGULAR', 'HOME', NULL, 1, null);
+values((SELECT max(id) FROM timecard), (SELECT project_id FROM project WHERE project_code = 'INTGR999BHD'), 'REGULAR', 'HOME', NULL, (SELECT max(id) FROM task), null);
 INSERT INTO timecard_entry(timecard_id, project_id, time_type, location, absences, task_id, relocated_country)
-values(1, (SELECT project_id FROM project WHERE project_code = 'INTGR999BHD'), 'REGULAR', 'OFFICE', NULL, 1, null);
+values((SELECT max(id) FROM timecard), (SELECT project_id FROM project WHERE project_code = 'INTGR999BHD'), 'REGULAR', 'OFFICE', NULL, (SELECT max(id) FROM task), null);
 COMMIT;
 
 --------------------------------------------- WORK ENTRY -------------------------------------------------------
@@ -351,10 +341,12 @@ BEGIN
 END;
 /
 
+SELECT * FROM timecard_entry
+
 BEGIN
-	insert_work_entry('06-07-2026', '09:00:00', '17:00:00', 8, 5);
-	insert_work_entry('07-07-2026', '09:00:00', '17:00:00', 8, 5);
-	insert_work_entry('08-07-2026', '09:00:00', '17:00:00', 8, 5);
-	insert_work_entry('09-07-2026', '09:00:00', '17:00:00', 8, 4);
-	insert_work_entry('10-07-2026', '09:00:00', '17:00:00', 8, 4);
+	insert_work_entry('06-07-2026', '09:00:00', '17:00:00', 8, 16);
+	insert_work_entry('07-07-2026', '09:00:00', '17:00:00', 8, 16);
+	insert_work_entry('08-07-2026', '09:00:00', '17:00:00', 8, 16);
+	insert_work_entry('09-07-2026', '09:00:00', '17:00:00', 8, 17);
+	insert_work_entry('10-07-2026', '09:00:00', '17:00:00', 8, 17);
 END;
