@@ -3,6 +3,17 @@
 ## Generic RDBMS
 Task: Create a database for a employee timecard system. Define and implement specific queries on it.
 
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Implemented Features Overview](#implemented-features-overview)
+    - [Constraints](#constraints)
+    - [JSON Column](#json-column)
+    - [Additional Indexes](#indexes)
+    - [View](#view)
+    - [Materialized View, GROUP BY and LEFT JOIN](#materialized-view-group-by-and-left-join)
+    - [Analytic Functions](#analytic-functions-query)
+    - [Extras](#extras)
+
 **Logical Database Diagram** | The diagram was made using https://dbdiagram.io/
 **NOTE THAT** at the moment when I have made the database diagram (and lost the code) employee metadata wasn't implemented yet and the absences column in timecard_entry was varchar instead of number.
 
@@ -13,7 +24,8 @@ This database models a simple employee time tracking system. Employees belong to
 employees submit weekly timecards, and every timecard contains project-specific work entries. The database also includes business rules
 enforced through triggers, helper PL/SQL procedures and functions, JSON data amd reporting queries.
 
-### Implemented features overview
+## Implemented features overview
+## constraints
 * Task: Include at least one example of each type of constraint presented during the course.
 Constraints implemented:
 - Primary Keys
@@ -33,6 +45,7 @@ Constraints implemented:
     > receives working date (calendaristic date), start hour, end hour, number of worked hours, timecard row id (entry id) and inserts automatically 
     > formated data into the table.
 
+## JSON Column
 * Task : Include at least one column containing semi-structured data (JSON or XML).  
 Implemented: Employees.employee_metadata
 This column stores employee specific metadata (i.e. phone number, social media profiles, spoken languages, emergency contacts)
@@ -50,6 +63,7 @@ SET employee_metadata = '{
 WHERE e.LAST_NAME = 'Ursu';
 ```
 
+## Indexes
 * Task: Include additional indexed fields besides foreign keys and primary keys.  
 Implemented: IX_Employee_birthdate
 ```sql
@@ -87,7 +101,7 @@ END;
 As we can see, the database engine decided to use the indexed scan instead of full table scan because
 the employees born between those two dates represented only 3.25% of all the available entries.
 
-
+## View
 * Task: Include at least one view.  
 Implemented: vw_employee_timecards
 ```sql
@@ -113,7 +127,7 @@ ORDER BY emp_name, period_start DESC;
 -- in one place for all employees, ready to be delivered
 -- can be filtered on person_number to display each individual's timecards
 ```
-
+## Materialized View, GROUP BY and LEFT JOIN
 * Task:  
 Include at least one materialized view.  
 Include at least one SELECT query using GROUP BY.  
@@ -145,6 +159,7 @@ GROUP BY d.department_name, d.department_id;
 -- instead of being re-computed each time
 ```
 
+## Analytic functions query
 * Task: Include at least one SELECT query using an analytic function other than ROW_NUMBER.
 Implemented: rank() and lag()
 ```sql
@@ -161,6 +176,7 @@ ORDER BY d.department_id, rank_in_dep;
 -- and the difference between his salary and the employee before him
 ```
 
+## Extras
 * EXTRAS
 ```sql
 -- extra group by
