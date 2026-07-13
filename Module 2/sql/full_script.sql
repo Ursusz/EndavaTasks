@@ -113,6 +113,18 @@ WHERE e.LAST_NAME = 'Ursu';
 UPDATE employee SET commission_pct = dbms_random.value(0, 1);
 UPDATE employee SET commission_pct = round(commission_pct, 1);
 
+UPDATE employee
+SET commission_pct = NULL
+WHERE PERSON_NUMBER IN (
+	SELECT PERSON_NUMBER
+	FROM (
+		SELECT PERSON_NUMBER
+		FROM EMPLOYEE
+		ORDER BY dbms_random.value
+	)
+	FETCH FIRST 150 ROWS only
+);
+
 --------------------------------------------- PROJECT -------------------------------------------------------
 
 CREATE TABLE project(
