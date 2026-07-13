@@ -51,6 +51,7 @@ CREATE TABLE EMPLOYEE(
 	department_id NUMBER NOT NULL,
 	salary number(8, 2) CHECK (salary >= 0),
 	manager_id number(6),
+	commission_pct number,
 	CONSTRAINT pk_employee PRIMARY KEY(person_number),
 	CONSTRAINT fk_employee_department FOREIGN KEY(department_id) REFERENCES department(department_id),
 	CONSTRAINT fk_employee_manager FOREIGN KEY(manager_id) REFERENCES employee(person_number)
@@ -108,6 +109,9 @@ SET employee_metadata = '{
 	}
 }'
 WHERE e.LAST_NAME = 'Ursu';
+
+UPDATE employee SET commission_pct = dbms_random.value(0, 1);
+UPDATE employee SET commission_pct = round(commission_pct, 1);
 
 --------------------------------------------- PROJECT -------------------------------------------------------
 
