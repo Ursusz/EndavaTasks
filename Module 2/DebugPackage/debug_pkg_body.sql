@@ -67,4 +67,21 @@ CREATE OR REPLACE PACKAGE BODY debug_pkg AS
 		COMMIT;
 		END IF;
 	END log_error;
+	
+	PROCEDURE show_debug_level IS
+	BEGIN
+		INSERT INTO debug_log(module_name, line_no, log_message, log_level)
+		values(
+			'system',
+			NULL,
+			CASE g_debug_level
+				WHEN c_debug THEN 'debug level'
+				WHEN c_info THEN 'info level'
+				WHEN c_warn THEN 'warning level'
+				WHEN c_error THEN 'error level'
+			END,
+			c_info
+		);
+		COMMIT;
+	END show_debug_level;
 END debug_pkg;

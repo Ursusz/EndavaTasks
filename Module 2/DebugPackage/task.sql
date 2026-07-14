@@ -3,6 +3,7 @@ IS
 	c_default_commission NUMBER := 0.2;
 	v_current_commission NUMBER;
 	v_msg_lcl varchar2(4000);
+	v_salary_result NUMBER;
 BEGIN
 	IF 1=1 THEN
 		debug_pkg.enable_debug();
@@ -11,22 +12,22 @@ BEGIN
 	END IF;
 
 	FOR cu IN (SELECT person_number, first_name, last_name, salary, commission_pct FROM employee) LOOP
-		v_msg_lcl := 'Current employee read - ' || cu.first_name || ' ' || cu.last_name || ' (' || cu.person_number || ')'
+		v_msg_lcl := 'Current employee read - ' || cu.first_name || ' ' || cu.last_name || ' (' || cu.person_number || ')';
 		debug_pkg.log_msg(
 			'update_emp_sal_with_commission', 
-			12, 
+			16, 
 			debug_pkg.c_info,
 			v_msg_lcl
 		);
 		
 		v_current_commission := COALESCE(cu.commission_pct, c_default_commission);
-		v_msg_lcl := 'Current salary: ' || cu.salary || ' (commission pct: ' || v_current_commission || ')'
+		v_msg_lcl := 'Current salary: ' || cu.salary || ' (commission pct: ' || v_current_commission || ')';
 		IF cu.commission_pct IS NULL THEN
 			v_msg_lcl := v_msg_lcl || '[DEFAULT] - before update';
 		END IF;
 		debug_pkg.log_msg(
 			'update_emp_sal_with_commission', 
-			24, 
+			28, 
 			debug_pkg.c_info,
 			v_msg_lcl
 		);
@@ -36,6 +37,33 @@ BEGIN
 		WHERE person_number = cu.person_number;
 		COMMIT;
 		
-		-- todo
+		SELECT salary
+		INTO v_salary_result
+		FROM employee
+		WHERE person_number = cu.person_number;
+		
+		v_msg_lcl := 'Update complete. New salary: ' || v_salary_result || ' (Employee code: ' || cu.person_number || ')';
+		debug_pkg.log_msg(
+			'update_emp_sal_with_commission',
+			46,
+			debug_pkg.c_info,
+			v_msg_lcl
+		);
 	END LOOP;	
-END;
+	EXCEPTION
+		WHEN no_data_found OR too_many_rows OR value_error OR program_error THEN
+			debug_pkg.log_error(
+				'update_emp_sal_with_commission',
+				55,
+				'update employee salary',
+				'ERROR while updating employee salary: ' || SQLERRM
+			);
+		WHEN OTHERS THEN
+			debug_pkg.log_error(
+				'update_emp_sal_with_commission',
+				62,
+				'update employee salary',
+				'WARNING while updating employee salary: ' || SQLERRM,
+				debug_pkg.c_warn
+			);
+END update_emp_sal_with_commission;

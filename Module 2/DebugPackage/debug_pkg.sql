@@ -33,4 +33,6 @@ CREATE OR REPLACE PACKAGE debug_pkg AS
 		p_err varchar2,
 		p_level NUMBER DEFAULT c_error
 	);
+	
+	PROCEDURE show_debug_level;
 END debug_pkg;
