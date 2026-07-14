@@ -11,11 +11,36 @@ BEGIN
 		debug_pkg.disable_debug();
 	END IF;
 
+	/*
+	TASK: Using dynamic SQL or an explicit cursor, depending on your preference"
+	I chose to use an implicit cursor  [for cu in (select ...) loop] while updating the employee.
+	However, below is an example of how an explicit cursor could be used to accomplish the same task.
+
+	First, the cursor must be declare between the IS and BEGIN sections
+	
+	CURSOR cu IS
+	select person_number, first_name, last_name, salary, commission_pct from employee for update;
+
+	Then, the loop would look something like this:
+	
+	OPEN cu;
+	LOOP
+		fetch cu into ...
+		exit when cu%NOTFOUND;
+
+		update employee
+		set salary = ...
+		where current of cu;
+	END LOOP;
+
+	close cu;
+	*/
+
 	FOR cu IN (SELECT person_number, first_name, last_name, salary, commission_pct FROM employee) LOOP
 		v_msg_lcl := 'Current employee read - ' || cu.first_name || ' ' || cu.last_name || ' (' || cu.person_number || ')';
 		debug_pkg.log_msg(
-			'update_emp_sal_with_commission', 
-			16, 
+			'[READ]update_emp_sal_with_commission', 
+			null, 
 			debug_pkg.c_info,
 			v_msg_lcl
 		);
@@ -26,8 +51,8 @@ BEGIN
 			v_msg_lcl := v_msg_lcl || '[DEFAULT] - before update';
 		END IF;
 		debug_pkg.log_msg(
-			'update_emp_sal_with_commission', 
-			28, 
+			'[COMMISSION]update_emp_sal_with_commission', 
+			null, 
 			debug_pkg.c_info,
 			v_msg_lcl
 		);
@@ -44,8 +69,8 @@ BEGIN
 		
 		v_msg_lcl := 'Update complete. New salary: ' || v_salary_result || ' (Employee code: ' || cu.person_number || ')';
 		debug_pkg.log_msg(
-			'update_emp_sal_with_commission',
-			46,
+			'[UPDATE]update_emp_sal_with_commission',
+			null,
 			debug_pkg.c_info,
 			v_msg_lcl
 		);
@@ -53,15 +78,15 @@ BEGIN
 	EXCEPTION
 		WHEN no_data_found OR too_many_rows OR value_error OR program_error THEN
 			debug_pkg.log_error(
-				'update_emp_sal_with_commission',
-				55,
+				'[ERROR]update_emp_sal_with_commission',
+				null,
 				'update employee salary',
 				'ERROR while updating employee salary: ' || SQLERRM
 			);
 		WHEN OTHERS THEN
 			debug_pkg.log_error(
-				'update_emp_sal_with_commission',
-				62,
+				'[WARN]update_emp_sal_with_commission',
+				null,
 				'update employee salary',
 				'WARNING while updating employee salary: ' || SQLERRM,
 				debug_pkg.c_warn
