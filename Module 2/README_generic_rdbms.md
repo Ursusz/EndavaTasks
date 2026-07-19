@@ -14,7 +14,7 @@ Task: Create a database for a employee timecard system. Define and implement spe
     - [Analytic Functions](#analytic-functions-query)
     - [Extras](#extras)
 
-**Logical Database Diagram** | The diagram was made using https://dbdiagram.io/
+**Logical Database Diagram** | The diagram was made using https://dbdiagram.io/  
 **NOTE THAT** at the moment when I have made the database diagram (and lost the code) employee metadata wasn't implemented yet and the absences column in timecard_entry was varchar instead of number.
 
 ![DatabaseDiagram](/Module%202/static/database_diagram.png)
