@@ -28,7 +28,8 @@ using historical attributes for employees (grade, discipline, line manager, du).
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8"/><style>
+<meta charset="UTF-8"/>
+<style>
 table {border: medium solid #6495ed;border-collapse: collapse;width: 100%;} th{font-family: monospace;border: thin solid #6495ed;padding: 5px;background-color: #D0E3FA;}th{text-align: left;}td{font-family: sans-serif;border: thin solid #6495ed;padding: 5px;text-align: center;}.odd{background:#e8edff;}img{padding:5px; border:solid; border-color: #dddddd #aaaaaa #aaaaaa #dddddd; border-width: 1px 2px 2px 1px; background-color:white;}</style>
 </head>
 <body>
