@@ -29,8 +29,6 @@ using historical attributes for employees (grade, discipline, line manager, du).
 <html>
 <head>
 <meta charset="UTF-8"/>
-<style>
-table {border: medium solid #6495ed;border-collapse: collapse;width: 100%;} th{font-family: monospace;border: thin solid #6495ed;padding: 5px;background-color: #D0E3FA;}th{text-align: left;}td{font-family: sans-serif;border: thin solid #6495ed;padding: 5px;text-align: center;}.odd{background:#e8edff;}img{padding:5px; border:solid; border-color: #dddddd #aaaaaa #aaaaaa #dddddd; border-width: 1px 2px 2px 1px; background-color:white;}</style>
 </head>
 <body>
 <table><tr><th colspan="12"><pre><code>SELECT * FROM fact_employee_daily</code></pre></th></tr><tr><th>FACT_ID</th><th>DATE_KEY</th><th>EMPLOYEE_KEY</th><th>WORK_TYPE_KEY</th><th>ABSENCE_TYPE_KEY</th><th>REPORTED_HOURS</th><th>ABSENCE_HOURS</th><th>FIRST_JOIN</th><th>LAST_LEAVE</th><th>TOTAL_PRESENCE</th><th>WAS_PRESENT</th><th>WAS_ABSENT</th></tr><tr class="odd"><td>29</td><td>20,260,713</td><td>2</td><td>2</td><td>&nbsp;</td><td>8</td><td>0</td><td>2026-06-13 12:38:00.000</td><td>2026-06-13 14:15:00.000</td><td>1H 37M 0S</td><td>Y</td><td>N</td></tr>
@@ -66,8 +64,7 @@ table {border: medium solid #6495ed;border-collapse: collapse;width: 100%;} th{f
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8"/><style>
-table {border: medium solid #6495ed;border-collapse: collapse;width: 100%;} th{font-family: monospace;border: thin solid #6495ed;padding: 5px;background-color: #D0E3FA;}th{text-align: left;}td{font-family: sans-serif;border: thin solid #6495ed;padding: 5px;text-align: center;}.odd{background:#e8edff;}img{padding:5px; border:solid; border-color: #dddddd #aaaaaa #aaaaaa #dddddd; border-width: 1px 2px 2px 1px; background-color:white;}</style>
+<meta charset="UTF-8"/>
 </head>
 <body>
 <table><tr><th colspan="12"><pre><code>SELECT * FROM fact_employee_monthly</code></pre></th></tr><tr><th>FACT_ID</th><th>EMPLOYEE_KEY</th><th>YEAR_NUMBER</th><th>MONTH_NUMBER</th><th>TOTAL_REPORTED_HOURS</th><th>TOTAL_ABSENCE_HOURS</th><th>MEDICAL_LEAVE_DAYS</th><th>ANNUAL_LEAVE_DAYS</th><th>PUBLIC_HOLIDAY_DAYS</th><th>EXAM_LEAVE_HOURS</th><th>ATTENDANCE_DAYS</th><th>PRESENCE_PERCENTAGE</th></tr><tr class="odd"><td>1</td><td>2</td><td>2,026</td><td>7</td><td>48</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>6</td><td>100</td></tr>
